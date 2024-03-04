@@ -1,0 +1,161 @@
+
+Option Explicit
+ 
+
+Sub MakeTableHTML()
+    Dim ws As Worksheet
+    Set ws = ThisWorkbook.Worksheets("Sheet1")
+    
+    Dim mytable As Variant
+    mytable = ws.Range("A1").CurrentRegion
+    
+    Dim amazon_tag As String
+
+    Dim str As String
+   
+    Dim i As Long
+    For i = 2 To UBound(mytable)
+        amazon_tag = Cells(i, "M") + "?tag=46490ec-22"
+        str = str & " <div class=""affiliate-link-box"">" & vbCrLf
+        str = str & "      <a href=""" & amazon_tag & """ target=""_blank""><img src=""" & Cells(i, "T") & """ title=""" & Cells(i, "S") & """></a>" & vbCrLf
+        str = str & "      <div class=""affiliate-box-information"">" & vbCrLf
+        str = str & "           <a href=""" & Cells(i, "M").Value & """ target=""_blank""><p class=""product-name"">""" & Cells(i, "S") & """</p></a> " & vbCrLf
+        str = str & "           <p class=""price"">Price: """ & Cells(i, "H").Value & """ ‰~</p> " & vbCrLf
+        str = str & "           <p class=""sale"">Price sale: """ & Cells(i, "F").Value & """ ‰~</p>" & vbCrLf
+        str = str & "           <p class=""sale_percent"">Rate sale: """ & Cells(i, "F") & """ % </p>" & vbCrLf
+        str = str & "           <div class=""affiliate-link-buttons""> " & vbCrLf
+        str = str & "                   <div class=""affiliate-button-amazon""><a href=""amazon_tag"" target=""_blank"">""" & Cells(i, "H").Value & """ </a></div> " & vbCrLf
+        str = str & "                   <div class=""affiliate-button-rakuten""><a href=""amazon_tag"" target=""_blank"">Rakuten</a></div> " & vbCrLf
+        str = str & "           </div>" & vbCrLf
+        str = str & "       </div>" & vbCrLf
+        str = str & "</div>" & vbCrLf
+               
+    Next
+
+
+    Dim fs As Scripting.FileSystemObject
+    Set fs = New Scripting.FileSystemObject
+    
+    Dim path As String
+    path = ThisWorkbook.path & "\" & "table.txt"
+    
+
+    Dim txt As TextStream
+    Set txt = fs.OpenTextFile(Filename:=path, IOMode:=ForWriting, Create:=True, Format:=TristateUseDefault)
+
+    txt.WriteLine str
+    
+
+    Set txt = Nothing
+    Set fs = Nothing
+ 
+
+End Sub
+
+<style>
+ /* アフィリエイト用ボックスCSS開始 */
+  .affiliate-link-box {
+    border: rgb(218, 218, 218) solid 1px;
+    display: flex;
+    flex-direction: row;
+    margin-bottom:5px;
+  }
+
+  .affiliate-link-box a {
+    text-decoration: none;
+  }
+
+  .affiliate-link-box img {
+    margin: 10px 25px;
+   /* height: 160px;*/
+    /*width: 160px;*/
+  }
+
+  .affiliate-box-information {
+    margin-right: 10px;
+    margin-left:50px;
+  }
+
+  .product-name {
+    font-size: 20px;
+    margin-bottom: 0;
+    color: black;
+  }
+
+  .maker-name {
+    margin-top: 3px;
+    color: rgb(128, 128, 128);
+  }
+
+  .affiliate-link-buttons {
+    display: flex;
+    flex-direction: row;
+    margin-top: 15px;
+    margin-left: 5px;
+    margin-bottom:10px;
+  }
+
+  .affiliate-link-buttons div {
+    padding: 3px 10px;
+    border-radius: 3px;
+    margin-right: 10px;
+    box-shadow: 1px 1px 5px rgb(167, 167, 167);
+    font-size: 13px;
+  }
+
+  .affiliate-link-buttons a {
+    color: white;
+  }
+
+  .affiliate-link-buttons div:hover {
+    transform: scale(1.1, 1.1);
+  }
+
+  .affiliate-button-amazon {
+    background-color: #FF9900;
+  }
+
+  .affiliate-button-rakuten {
+    background-color: #B31E23;
+  }
+
+  .affiliate-button-yahoo {
+    background-color: #FF0033;
+  }
+  /* レスポンシブ */
+  @media screen and (max-width: 750px) {
+    .affiliate-link-box{
+      width: 95%;
+      display: flex;
+      flex-direction: column;
+      margin: 0;
+    }
+    .affiliate-link-box img{
+      width: 80%;
+      height: auto;
+      margin: auto;
+    }
+    .product-name,.maker-name{
+      margin: auto 5px;
+    }
+    .product-name{
+      line-height: 22px;
+    }
+    .affiliate-link-buttons{
+      display: flex;
+      flex-direction: column;
+      margin: 0;
+      margin-bottom: 8px;
+    }
+    .affiliate-link-buttons div{
+      width: 83%;
+      margin: 5px auto;
+    }
+    .affiliate-box-information{
+      width: 100%;
+      margin: 0;
+    }
+  }
+
+  /* アフィリエイト用ボックスCSS終了 */
+  </style>
